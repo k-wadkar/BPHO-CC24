@@ -1,0 +1,19 @@
+- Typescript has been enabled (for now just treat like standard js code but use file type .ts)
+- JSX support enabled
+- Vue router enabled (will allow smooth movement beween webpages and possibly transitions)
+- Pinia enabled (basically allows you to create project-level global variables and methods of sort which can be acccessed from any component)
+- Vitest enabled (probably won't need it but could be useful?)
+- ESLint enabled (locates and occasionally fixes code issues)
+- Prettier enabled and extension installed (automatically formats code on save)
+- The .vscode directory in the root directory contains cusomized settings for this speciffic project for the vscode prettier extension
+
+Todo:
+- Install all relevant packages - remeber to navigate to correct folder before installation (plotly.js, plotly.js-basic-dist, @clalarco/vue3-plotly)
+- Clean code (i.e. purge redundant vue components, etc.)
+- Create UI skeleton (navbar, etc.)
+    - Configure with vue router (https://router.vuejs.org/guide/)
+- Webpage transitions (@keyframes)
+- How to make components only appear when scrolled into view
+
+Other notes:
+- Create custom vue component for each task??
