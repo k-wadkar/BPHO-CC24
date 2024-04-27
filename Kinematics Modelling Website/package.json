@@ -14,7 +14,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@clalarco/vue3-plotly": "^0.1.5",
     "pinia": "^2.1.7",
+    "plotly.js-basic-dist": "^2.32.0",
+    "plotly.js-dist": "^2.32.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

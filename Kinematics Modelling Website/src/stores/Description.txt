@@ -1,0 +1,1 @@
+This folder includes 'stores' (i.e. project-level global variables) declared thorugh Pinia

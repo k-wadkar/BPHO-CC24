@@ -1,0 +1,1 @@
+This folder contains decorative assets and stylesheets (i.e. images, CSS files, etc.)
