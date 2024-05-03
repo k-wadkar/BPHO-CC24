@@ -1,0 +1,1 @@
+Contains the main 'views' which are displayed within the <RouterView /> of the otherwise static framework of App.vue

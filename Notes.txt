@@ -9,7 +9,7 @@
 
 Todo:
 + Install all relevant packages - remember to navigate to correct folder before installation (plotly.js, plotly.js-basic-dist, @clalarco/vue3-plotly)
-- Clean code (i.e. purge redundant vue components, etc.)
++ Clean code (i.e. purge redundant vue components, etc.)
 - Create UI skeleton (navbar, etc.)
     - Configure with vue router (https://router.vuejs.org/guide/)
 - Webpage transitions (@keyframes)

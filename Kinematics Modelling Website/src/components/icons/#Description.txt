@@ -1,0 +1,1 @@
+Contains svg files of icons used within the website
