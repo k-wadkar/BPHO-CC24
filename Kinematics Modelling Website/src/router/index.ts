@@ -20,27 +20,34 @@ const router = createRouter({
     {
       path: '/tasks',
       name: 'tasks',
-      component: () => import('../views/TaskMaster.vue')
+      component: () => import('../views/TaskMaster.vue'),
+      children: [
+        {
+          path: 'overview',
+          name: 'taskOverviews',
+          component: () => import('../views/tasks/TaskOverviews.vue')
+        },
+        {
+          path: 'task1',
+          name: 'task1',
+          component: () => import('../views/tasks/TaskOne.vue')
+        },
+        {
+          path: 'task2',
+          name: 'task2',
+          component: () => import('../views/tasks/TaskTwo.vue')
+        },
+        {
+          path: 'task3',
+          name: 'task3',
+          component: () => import('../views/tasks/TaskThree.vue')
+        }
+      ]
     },
     {
       path: '/writeup',
       name: 'writeup',
       component: () => import('../views/WriteUp.vue')
-    },
-    {
-      path: '/task1',
-      name: 'task1',
-      component: () => import('../views/tasks/TaskOne.vue')
-    },
-    {
-      path: '/task2',
-      name: 'task2',
-      component: () => import('../views/tasks/TaskTwo.vue')
-    },
-    {
-      path: '/task3',
-      name: 'task3',
-      component: () => import('../views/tasks/TaskThree.vue')
     }
   ]
 })

@@ -4,9 +4,22 @@ import { RouterLink } from 'vue-router'
 
 <template>
   <nav>
-    <RouterLink to="/task1">Task 1</RouterLink>
-    <RouterLink to="/task2">Task 2</RouterLink>
-    <RouterLink to="/task2">Task 3</RouterLink>
+    <ul class="side-Links">
+      <li class="side-Item">
+        <RouterLink :to="{ name: 'taskOverviews' }">
+          <span class="side-text">Task Overviews</span>
+        </RouterLink>
+      </li>
+      <li class="side-Item">
+        <RouterLink :to="{ name: 'task1' }"><span class="side-text">Task 1</span></RouterLink>
+      </li>
+      <li class="side-Item">
+        <RouterLink :to="{ name: 'task2' }"><span class="side-text">Task 2</span></RouterLink>
+      </li>
+      <li class="side-Item">
+        <RouterLink :to="{ name: 'task3' }"><span class="side-text">Task 3</span></RouterLink>
+      </li>
+    </ul>
   </nav>
 </template>
 

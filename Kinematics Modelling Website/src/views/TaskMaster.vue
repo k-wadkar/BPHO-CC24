@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import SideBar from '../components/SideBar.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <SideBar></SideBar>
+  <SideBar />
   <main>
-    <p>What the bombotrizzy</p>
+    <RouterView />
   </main>
 </template>
 

@@ -1,9 +1,22 @@
-/*@import './base.css';
-refer to Plotly Test App for default main.css content
-*/
+@import './base.css';
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap');
 
-body,
-h1 {
+* {
+  /*Means width and height include padding and border, rather than padding and border adding onto the specified width and height*/
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Ubuntu Sans', sans-serif;
+}
+
+body {
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+a {
+  font-weight: 500;
+  font-size: 18px;
+  text-decoration: none;
+  color: var(--color-text);
 }
