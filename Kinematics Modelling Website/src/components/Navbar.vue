@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 
 <template>
   <nav class="nav-Container">
+    <!-- Contains website icon and title (which link to the homepage) -->
     <div class="nav-Left">
       <RouterLink :to="{ name: 'home' }" class="side-Icons">
         <img src="..\assets\logo.svg" width="50px" />
@@ -14,7 +15,8 @@ import { RouterLink } from 'vue-router'
       </RouterLink>
     </div>
 
-    <ul class="nav-Links">
+    <!-- Contains internal links (using vue router) -->
+    <ul class="nav-Center">
       <li class="nav-Item">
         <RouterLink :to="{ name: 'home' }"><span class="nav-text">Home</span></RouterLink>
       </li>
@@ -29,13 +31,14 @@ import { RouterLink } from 'vue-router'
       </li>
     </ul>
 
+    <!-- Contains external links (i.e. to GitHub and LinkedIn) -->
     <div class="nav-Right">
       <a href="https://www.linkedin.com/in/kshitij-wadkar-2557852b5/" class="side-Icons">
-        <img src="..\assets\linkedIn-logo.svg" width="50px" />
+        <img src="..\assets\linkedIn-logo.svg" width="50px" class="external-Icons" />
       </a>
 
       <a href="https://github.com/k-wadkar">
-        <img src="..\assets\github-logo.svg" width="50px" class="side-Icons" />
+        <img src="..\assets\github-logo.svg" width="50px" class="external-Icons" />
       </a>
     </div>
   </nav>
@@ -44,45 +47,71 @@ import { RouterLink } from 'vue-router'
 <style scoped>
 @import '../assets/base.css';
 
+/* Customisations for the whole navbar */
 .nav-Container {
   background-image: linear-gradient(to top, rgba(0, 255, 191, 0.1), var(--color-background-mute));
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   height: 75px;
 }
 
+/* Customisations for the icons on the far ends of the navbar */
 .nav-Left,
 .nav-Right {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin: 1vw;
+  gap: 1vw;
 }
 
-.side-Icons {
-  margin: 0 0.5rem;
-}
-
-.nav-Links {
-  display: flex;
-  list-style: none;
-  justify-content: space-around;
-  align-items: center;
-  /*flex-grow: 1;*/
-  /* padding: 1.5% 10%; */
-}
-
-.nav-Links li {
-  display: inline-block;
-  /* padding: 0px 10%; */
-  margin: 0px 3vw;
-}
-
-.nav-Links li a {
+.nav-Right a {
+  opacity: 1;
   transition: all 0.3s ease 0s;
 }
 
-.nav-Links li a:hover {
+.nav-Right a:hover {
+  opacity: 0.75;
+}
+/* Switches the colour of the github and linkedIn logo (to black) depending if light mode on */
+.external-Icons {
+  filter: invert(75%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nav-Right a {
+    opacity: 0.5;
+  }
+
+  .nav-Right a:hover {
+    opacity: 1;
+  }
+  /* Reverts logo colours to white if dark mode on */
+  .external-Icons {
+    filter: invert(0%);
+  }
+}
+
+/* Customisations for the internal links in the center of the navbar */
+.nav-Center {
+  flex-grow: 1;
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-Center li {
+  display: inline-block;
+  margin: 0px 3vw;
+}
+
+.nav-Center li a {
+  transition: all 0.3s ease 0s;
+}
+
+.nav-Center li a:hover {
   color: var(--color-text-hover);
 }
 </style>

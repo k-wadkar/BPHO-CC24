@@ -1,3 +1,17 @@
 <template>
   <h1>This is a home page</h1>
+
+  <h2>Todo List:</h2>
+  <ol>
+    <li>Find linkedIn and github logos for light mode and add relevant css to switch</li>
+    <li>Make layout responsive</li>
+    <li>Finish sidebar</li>
+    <li>Create website logo</li>
+    <li>Make graph component</li>
+    <li>Complete 3 tasks</li>
+    <li>Build using vite</li>
+    <li>vite build --report</li>
+    <li>Migrate to github pages (configure for vue router - auto redirecte to index.html...?)</li>
+    <li>Website speedtest (see onenote)</li>
+  </ol>
 </template>
