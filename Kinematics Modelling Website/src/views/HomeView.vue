@@ -3,6 +3,10 @@
 
   <h2>Todo List:</h2>
   <ol>
+    <li>Make it so that when hovering over the expand arrow the mouse turns to a pointer</li>
+    <li>Make it so that the current webpage is highlighted in some manner on the navbars</li>
+    <li>Fix sidebar text jumping</li>
+    <li>Make it so that when you click away from the navbar it closes on its own</li>
     <li>Make layout responsive</li>
     <li>Finish sidebar</li>
     <li>Create website logo</li>
