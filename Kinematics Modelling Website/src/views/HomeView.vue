@@ -3,7 +3,6 @@
 
   <h2>Todo List:</h2>
   <ol>
-    <li>Find linkedIn and github logos for light mode and add relevant css to switch</li>
     <li>Make layout responsive</li>
     <li>Finish sidebar</li>
     <li>Create website logo</li>

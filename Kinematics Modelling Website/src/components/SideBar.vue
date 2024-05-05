@@ -1,25 +1,37 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+
+let dynamicClass = ref('collapsed')
+
+function switchClass() {
+  if (dynamicClass.value == 'collapsed') {
+    dynamicClass.value = 'expanded'
+  } else {
+    dynamicClass.value = 'collapsed'
+  }
+}
 </script>
 
 <template>
-  <nav>
-    <ul class="side-Links">
+  <nav :class="dynamicClass">
+    <ul>
       <li class="side-Item">
         <RouterLink :to="{ name: 'taskOverviews' }">
           <span class="side-text">Task Overviews</span>
         </RouterLink>
       </li>
       <li class="side-Item">
-        <RouterLink :to="{ name: 'task1' }"><span class="side-text">Task 1</span></RouterLink>
+        <RouterLink :to="{ name: 'task1' }">Task 1</RouterLink>
       </li>
       <li class="side-Item">
-        <RouterLink :to="{ name: 'task2' }"><span class="side-text">Task 2</span></RouterLink>
+        <RouterLink :to="{ name: 'task2' }">Task 2</RouterLink>
       </li>
       <li class="side-Item">
-        <RouterLink :to="{ name: 'task3' }"><span class="side-text">Task 3</span></RouterLink>
+        <RouterLink :to="{ name: 'task3' }">Task 3</RouterLink>
       </li>
     </ul>
+    <img src="..\assets\logo.svg" width="60rem" id="collapse-Arrow" @click="switchClass()" />
   </nav>
 </template>
 
@@ -27,9 +39,49 @@ import { RouterLink } from 'vue-router'
 nav {
   margin: 0px;
   padding: 0;
-  width: 5rem;
   height: 100vh;
   position: fixed;
-  background-image: linear-gradient(to left, rgba(0, 255, 191, 0), rgb(0, 255, 191));
+  background-color: var(--color-background-mute);
+  transition: all 0.3s ease 0s;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#collapse-Arrow {
+  transition: all 0.3s ease 0s;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.collapsed {
+  width: 5rem;
+}
+.collapsed ul {
+  display: none;
+}
+.collapsed #collapse-Arrow {
+  transform: rotate(270deg);
+  margin-left: 0.75rem;
+}
+
+.expanded {
+  width: 15rem;
+}
+.expanded ul {
+  display: block;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* gap: 20vh; */
+  list-style: none;
+}
+.expanded #collapse-Arrow {
+  transform: rotate(90deg);
+  margin-left: 11rem;
 }
 </style>

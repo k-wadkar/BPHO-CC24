@@ -1,55 +1,100 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+
+let classHolder = ref('hidden')
+
+var myScrollFunc = function () {
+  var y = window.scrollY
+  if (y >= 75) {
+    classHolder.value = 'showing'
+  } else {
+    classHolder.value = 'hidden'
+  }
+}
+
+window.addEventListener('scroll', myScrollFunc)
 </script>
 
 <template>
-  <nav class="nav-Container">
-    <!-- Contains website icon and title (which link to the homepage) -->
-    <div class="nav-Left">
-      <RouterLink :to="{ name: 'home' }" class="side-Icons">
-        <img src="..\assets\logo.svg" width="50px" />
-      </RouterLink>
+  <a href="#top">
+    <img src="..\assets\logo.svg" width="60rem" id="jump-Arrow" :class="classHolder" />
+  </a>
 
-      <RouterLink :to="{ name: 'home' }" class="side-Icons">
-        <h1>BOUNCE</h1>
-      </RouterLink>
-    </div>
+  <a id="top">
+    <nav class="nav-Container">
+      <!-- Contains website icon and title (which link to the homepage) -->
+      <div class="nav-Left">
+        <RouterLink :to="{ name: 'home' }" class="side-Icons">
+          <img src="..\assets\logo.svg" width="50px" />
+        </RouterLink>
 
-    <!-- Contains internal links (using vue router) -->
-    <ul class="nav-Center">
-      <li class="nav-Item">
-        <RouterLink :to="{ name: 'home' }"><span class="nav-text">Home</span></RouterLink>
-      </li>
-      <li class="nav-Item">
-        <RouterLink :to="{ name: 'taskOverviews' }"><span class="nav-text">Tasks</span></RouterLink>
-      </li>
-      <li class="nav-Item">
-        <RouterLink :to="{ name: 'writeup' }"><span class="nav-text">Writeup</span></RouterLink>
-      </li>
-      <li class="nav-Item">
-        <RouterLink :to="{ name: 'about' }"><span class="nav-text">About</span></RouterLink>
-      </li>
-    </ul>
+        <RouterLink :to="{ name: 'home' }" class="side-Icons">
+          <h1>BOUNCE</h1>
+        </RouterLink>
+      </div>
 
-    <!-- Contains external links (i.e. to GitHub and LinkedIn) -->
-    <div class="nav-Right">
-      <a href="https://www.linkedin.com/in/kshitij-wadkar-2557852b5/" class="side-Icons">
-        <img src="..\assets\linkedIn-logo.svg" width="50px" class="external-Icons" />
-      </a>
+      <!-- Contains internal links (using vue router) -->
+      <ul class="nav-Center">
+        <li class="nav-Item">
+          <RouterLink :to="{ name: 'home' }"><span class="nav-text">Home</span></RouterLink>
+        </li>
+        <li class="nav-Item">
+          <RouterLink :to="{ name: 'taskOverviews' }"
+            ><span class="nav-text">Tasks</span></RouterLink
+          >
+        </li>
+        <li class="nav-Item">
+          <RouterLink :to="{ name: 'writeup' }"><span class="nav-text">Writeup</span></RouterLink>
+        </li>
+        <li class="nav-Item">
+          <RouterLink :to="{ name: 'about' }"><span class="nav-text">About</span></RouterLink>
+        </li>
+      </ul>
 
-      <a href="https://github.com/k-wadkar">
-        <img src="..\assets\github-logo.svg" width="50px" class="external-Icons" />
-      </a>
-    </div>
-  </nav>
+      <!-- Contains external links (i.e. to GitHub and LinkedIn) -->
+      <div class="nav-Right">
+        <a href="https://www.linkedin.com/in/kshitij-wadkar-2557852b5/" class="side-Icons">
+          <img src="..\assets\linkedIn-logo.svg" width="50px" class="external-Icons" />
+        </a>
+
+        <a href="https://github.com/k-wadkar">
+          <img src="..\assets\github-logo.svg" width="50px" class="external-Icons" />
+        </a>
+      </div>
+    </nav>
+  </a>
 </template>
 
 <style scoped>
 @import '../assets/base.css';
 
+#jump-Arrow {
+  position: fixed;
+  transform: rotate(180deg);
+  margin-left: 10px;
+  margin-top: 12px;
+  transition:
+    opacity 0.5s,
+    visibility 0.5s;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+.showing {
+  visibility: visible;
+  opacity: 1;
+}
+
 /* Customisations for the whole navbar */
 .nav-Container {
-  background-image: linear-gradient(to top, rgba(0, 255, 191, 0.1), var(--color-background-mute));
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 255, 191, 0.3),
+    var(--color-background-mute)
+  );
   display: flex;
   justify-content: space-around;
   align-items: center;
