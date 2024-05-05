@@ -35,7 +35,7 @@ import { RouterLink } from 'vue-router'
       </a>
 
       <a href="https://github.com/k-wadkar">
-        <img src="..\assets\github-logo.svg" width="50px" />
+        <img src="..\assets\github-logo.svg" width="50px" class="side-Icons" />
       </a>
     </div>
   </nav>
@@ -46,30 +46,36 @@ import { RouterLink } from 'vue-router'
 
 .nav-Container {
   background-image: linear-gradient(to top, rgba(0, 255, 191, 0.1), var(--color-background-mute));
-  /*background-color: var(--color-background-mute);*/
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 75px;
 }
 
 .nav-Left,
 .nav-Right {
   display: flex;
+  justify-content: space-around;
   align-items: center;
+}
+
+.side-Icons {
+  margin: 0 0.5rem;
 }
 
 .nav-Links {
   display: flex;
   list-style: none;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   /*flex-grow: 1;*/
-  padding: 1.5% 10%;
+  /* padding: 1.5% 10%; */
 }
 
 .nav-Links li {
   display: inline-block;
-  padding: 0px 5rem;
+  /* padding: 0px 10%; */
+  margin: 0px 3vw;
 }
 
 .nav-Links li a {
@@ -79,9 +85,4 @@ import { RouterLink } from 'vue-router'
 .nav-Links li a:hover {
   color: var(--color-text-hover);
 }
-/*
-.nav-Links li:nth-last-child(2) {
-  margin-right: 20px;
-}
-*/
 </style>
