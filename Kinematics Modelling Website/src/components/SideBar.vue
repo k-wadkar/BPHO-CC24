@@ -2,20 +2,43 @@
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 
-let dynamicClass = ref('collapsed')
+let barDynamicClass = ref('collapsed')
+let linkDynamicClass = ref('links-not-rendered')
+let arrowDynamicClass = ref('arrow-visible')
 
 function switchClass() {
-  if (dynamicClass.value == 'collapsed') {
-    dynamicClass.value = 'expanded'
-  } else {
-    dynamicClass.value = 'collapsed'
+  arrowDynamicClass.value = 'arrow-invisible'
+  // Opening the sidebar
+  if (barDynamicClass.value == 'collapsed') {
+    setTimeout(function () {
+      barDynamicClass.value = 'expanded'
+    }, 100)
+    setTimeout(function () {
+      linkDynamicClass.value = 'links-not-visible'
+    }, 301)
+    setTimeout(function () {
+      linkDynamicClass.value = 'links-are-visible'
+    }, 310)
   }
+  // Closing the sidebar
+  else {
+    linkDynamicClass.value = 'links-not-visible'
+    setTimeout(function () {
+      linkDynamicClass.value = 'links-not-rendered'
+    }, 201)
+    setTimeout(function () {
+      barDynamicClass.value = 'collapsed'
+    }, 210)
+  }
+  setTimeout(function () {
+    arrowDynamicClass.value = 'arrow-visible'
+  }, 350)
 }
 </script>
 
 <template>
-  <nav :class="dynamicClass">
-    <ul>
+  <nav :class="barDynamicClass">
+    <ul :class="linkDynamicClass">
       <li>
         <RouterLink :to="{ name: 'taskOverviews' }"> Overviews </RouterLink>
       </li>
@@ -53,7 +76,13 @@ function switchClass() {
         <RouterLink :to="{ name: 'extension2' }">Extension 2</RouterLink>
       </li>
     </ul>
-    <img src="..\assets\logo.svg" width="60rem" id="collapse-Arrow" @click="switchClass()" />
+    <img
+      src="..\assets\logo.svg"
+      width="60rem"
+      id="collapse-Arrow"
+      :class="arrowDynamicClass"
+      @click="switchClass()"
+    />
   </nav>
 </template>
 
@@ -65,40 +94,35 @@ nav {
   position: fixed;
   background-color: var(--color-background-mute);
   transition: all 0.2s ease 0s;
-
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
 }
 
+/* This bit */
 nav ul {
   transition:
-    opacity 0.5s,
-    visibility 0.5s;
+    opacity 0.2s,
+    visibility 0.2s;
 }
-
-#collapse-Arrow {
-  transition: all 0.3s ease 0s;
-}
-
-.collapsed {
-  width: 5rem;
-}
-.collapsed ul {
+.links-not-rendered {
   display: none;
 }
-.collapsed #collapse-Arrow {
-  transform: rotate(270deg);
-  margin-left: 0.75rem;
+.links-not-visible {
+  opacity: 0;
+  visibility: hidden;
+  display: block;
+  margin-left: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4vh;
+  list-style: none;
 }
 
-.expanded {
-  width: 15rem;
-}
-.expanded ul {
+.links-are-visible {
+  opacity: 1;
+  visibility: visible;
   margin-left: 5rem;
-  display: block;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -111,7 +135,39 @@ nav ul {
 .expanded ul li a:hover {
   color: var(--color-text-hover);
 }
+
+/* Ends here */
+
+#collapse-Arrow {
+  cursor: pointer;
+  transition:
+    opacity 0.1s,
+    visibility 0.1s;
+}
+
+.collapsed {
+  width: 5rem;
+}
+
+.collapsed #collapse-Arrow {
+  transform: rotate(270deg);
+  margin-left: 0.75rem;
+}
+
+.expanded {
+  width: 15rem;
+}
+
 .expanded #collapse-Arrow {
   transform: rotate(90deg);
+}
+
+.arrow-visible {
+  opacity: 1;
+  visibility: visible;
+}
+.arrow-invisible {
+  opacity: 0;
+  visibility: hidden;
 }
 </style>

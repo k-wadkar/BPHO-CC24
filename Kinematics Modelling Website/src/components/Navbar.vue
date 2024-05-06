@@ -58,7 +58,7 @@ window.addEventListener('scroll', myScrollFunc)
           <img src="..\assets\linkedIn-logo.svg" width="50px" class="external-Icons" />
         </a>
 
-        <a href="https://github.com/k-wadkar">
+        <a href="https://github.com/k-wadkar/BPHO-CC24">
           <img src="..\assets\github-logo.svg" width="50px" class="external-Icons" />
         </a>
       </div>
