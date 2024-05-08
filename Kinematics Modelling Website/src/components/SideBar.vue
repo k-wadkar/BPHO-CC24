@@ -6,10 +6,9 @@ let barDynamicClass = ref('collapsed')
 let linkDynamicClass = ref('links-not-rendered')
 let arrowDynamicClass = ref('arrow-visible')
 
-function switchClass() {
-  arrowDynamicClass.value = 'arrow-invisible'
-  // Opening the sidebar
+function expand() {
   if (barDynamicClass.value == 'collapsed') {
+    arrowDynamicClass.value = 'arrow-invisible'
     setTimeout(function () {
       barDynamicClass.value = 'expanded'
     }, 100)
@@ -19,9 +18,15 @@ function switchClass() {
     setTimeout(function () {
       linkDynamicClass.value = 'links-are-visible'
     }, 310)
+    setTimeout(function () {
+      arrowDynamicClass.value = 'arrow-visible'
+    }, 350)
   }
-  // Closing the sidebar
-  else {
+}
+
+function collapse() {
+  if (barDynamicClass.value == 'expanded') {
+    arrowDynamicClass.value = 'arrow-invisible'
     linkDynamicClass.value = 'links-not-visible'
     setTimeout(function () {
       linkDynamicClass.value = 'links-not-rendered'
@@ -29,11 +34,24 @@ function switchClass() {
     setTimeout(function () {
       barDynamicClass.value = 'collapsed'
     }, 210)
+    setTimeout(function () {
+      arrowDynamicClass.value = 'arrow-visible'
+    }, 350)
   }
-  setTimeout(function () {
-    arrowDynamicClass.value = 'arrow-visible'
-  }, 350)
 }
+
+function switchClass() {
+  // Opening the sidebar
+  if (barDynamicClass.value == 'collapsed') {
+    expand()
+  }
+  // Closing the sidebar
+  else {
+    collapse()
+  }
+}
+
+defineExpose({ collapse })
 </script>
 
 <template>
@@ -90,7 +108,7 @@ function switchClass() {
 nav {
   margin: 0px;
   padding: 0;
-  height: calc(100vh - 75px);
+  height: calc(100svh - 75px);
   position: fixed;
   background-color: var(--color-background-mute);
   transition: all 0.2s ease 0s;
@@ -169,5 +187,8 @@ nav ul {
 .arrow-invisible {
   opacity: 0;
   visibility: hidden;
+}
+a.router-link-active {
+  border-bottom: 2px solid blue;
 }
 </style>

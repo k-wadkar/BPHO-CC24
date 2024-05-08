@@ -159,4 +159,8 @@ window.addEventListener('scroll', myScrollFunc)
 .nav-Center li a:hover {
   color: var(--color-text-hover);
 }
+
+.nav-Center .router-link-active {
+  border-bottom: 2px solid blue;
+}
 </style>
