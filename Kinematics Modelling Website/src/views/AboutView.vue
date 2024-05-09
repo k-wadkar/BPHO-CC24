@@ -1,3 +1,5 @@
 <template>
-  <h1>This is an about page</h1>
+  <div class="rootElement">
+    <h1>This is an about page</h1>
+  </div>
 </template>

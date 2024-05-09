@@ -10,10 +10,12 @@ const directCollapse = () => {
 </script>
 
 <template>
-  <SideBar ref="sideInstance" />
-  <main @click="directCollapse">
-    <RouterView />
-  </main>
+  <div class="rootElement">
+    <SideBar ref="sideInstance" />
+    <main @click="directCollapse">
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style scoped>

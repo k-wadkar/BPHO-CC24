@@ -55,7 +55,7 @@ defineExpose({ collapse })
 </script>
 
 <template>
-  <nav :class="barDynamicClass">
+  <nav :class="barDynamicClass" @click="expand()">
     <ul :class="linkDynamicClass">
       <li>
         <RouterLink :to="{ name: 'taskOverviews' }"> Overviews </RouterLink>
