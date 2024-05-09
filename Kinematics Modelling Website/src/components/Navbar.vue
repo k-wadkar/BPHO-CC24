@@ -37,18 +37,16 @@ window.addEventListener('scroll', myScrollFunc)
       <!-- Contains internal links (using vue router) -->
       <ul class="nav-Center">
         <li class="nav-Item">
-          <RouterLink :to="{ name: 'home' }"><span class="nav-text">Home</span></RouterLink>
+          <RouterLink :to="{ name: 'home' }">Home</RouterLink>
         </li>
         <li class="nav-Item">
-          <RouterLink :to="{ name: 'taskOverviews' }"
-            ><span class="nav-text">Tasks</span></RouterLink
-          >
+          <RouterLink :to="{ name: 'tasks' }">Tasks</RouterLink>
         </li>
         <li class="nav-Item">
-          <RouterLink :to="{ name: 'writeup' }"><span class="nav-text">Writeup</span></RouterLink>
+          <RouterLink :to="{ name: 'writeup' }">Writeup</RouterLink>
         </li>
         <li class="nav-Item">
-          <RouterLink :to="{ name: 'about' }"><span class="nav-text">About</span></RouterLink>
+          <RouterLink :to="{ name: 'about' }">About</RouterLink>
         </li>
       </ul>
 
@@ -90,11 +88,7 @@ window.addEventListener('scroll', myScrollFunc)
 
 /* Customisations for the whole navbar */
 .nav-Container {
-  background-image: linear-gradient(
-    to bottom,
-    rgba(0, 255, 191, 0.3),
-    var(--color-background-mute)
-  );
+  background-image: linear-gradient(to bottom, var(--c-theme-soft), var(--color-background-mute));
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -161,6 +155,7 @@ window.addEventListener('scroll', myScrollFunc)
 }
 
 .nav-Center .router-link-active {
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid var(--c-theme-bright);
+  transition: border-bottom 300ms ease-in-out;
 }
 </style>

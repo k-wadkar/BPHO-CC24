@@ -189,6 +189,6 @@ nav ul {
   visibility: hidden;
 }
 a.router-link-active {
-  border-bottom: 2px solid blue;
+  border-bottom: 2px solid var(--c-theme-bright);
 }
 </style>

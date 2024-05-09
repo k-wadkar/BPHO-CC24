@@ -21,6 +21,8 @@ const router = createRouter({
       path: '/tasks',
       name: 'tasks',
       component: () => import('../views/TaskMaster.vue'),
+      redirect: '/tasks/overview',
+
       children: [
         {
           path: 'overview',
