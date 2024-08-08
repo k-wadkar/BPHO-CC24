@@ -2,6 +2,18 @@
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 
+/*
+The following creates a variable which contains the string 'hidden'.
+Then, depending on if the user has scrolled down enough such that the
+navbar is out of the viewport, this variable is switched between 'showing'
+and 'hidden'. Evaluation of this condition occurs every time the user scolls.
+
+If the navbar is out of sight, the variable is switched to 'showing', and
+vice versa for when it is in sight. This variable is then dynamically bound to
+the class of the button which jumps the viewport to the top of the page.
+
+This creates the effect of the 'jump to top' button appearing after scrolling down.
+*/
 let classHolder = ref('hidden')
 
 var myScrollFunc = function () {
@@ -17,51 +29,52 @@ window.addEventListener('scroll', myScrollFunc)
 </script>
 
 <template>
+  <!--Jump to top button-->
   <a href="#top">
     <img src="..\assets\logo.svg" width="60rem" id="jump-Arrow" :class="classHolder" />
   </a>
 
-  <a id="top">
-    <nav class="nav-Container">
-      <!-- Contains website icon and title (which link to the homepage) -->
-      <div class="nav-Left">
-        <RouterLink :to="{ name: 'home' }" class="side-Icons">
-          <img src="..\assets\logo.svg" width="50px" />
-        </RouterLink>
+  <nav class="nav-Container">
+    <!-- Contains website icon and title (which link to the homepage) -->
+    <div class="nav-Left">
+      <RouterLink :to="{ name: 'home' }">
+        <img src="..\assets\logo.svg" width="50px" />
+      </RouterLink>
 
-        <RouterLink :to="{ name: 'home' }" class="side-Icons">
-          <h1>BOUNCE</h1>
-        </RouterLink>
-      </div>
+      <RouterLink :to="{ name: 'home' }">
+        <h1>BOUNCE</h1>
+      </RouterLink>
+    </div>
 
-      <!-- Contains internal links (using vue router) -->
-      <ul class="nav-Center">
-        <li class="nav-Item">
-          <RouterLink :to="{ name: 'home' }">Home</RouterLink>
-        </li>
-        <li class="nav-Item">
-          <RouterLink :to="{ name: 'tasks' }">Tasks</RouterLink>
-        </li>
-        <li class="nav-Item">
-          <RouterLink :to="{ name: 'writeup' }">Writeup</RouterLink>
-        </li>
-        <li class="nav-Item">
-          <RouterLink :to="{ name: 'about' }">About</RouterLink>
-        </li>
-      </ul>
+    <!-- Contains internal links (using vue router) -->
+    <ul class="nav-Center">
+      <li class="nav-Item">
+        <RouterLink :to="{ name: 'home' }">Home</RouterLink>
+      </li>
+      <li class="nav-Item">
+        <RouterLink :to="{ name: 'tasks' }">Tasks</RouterLink>
+      </li>
+      <li class="nav-Item">
+        <RouterLink :to="{ name: 'writeup' }">Writeup</RouterLink>
+      </li>
+      <li class="nav-Item">
+        <RouterLink :to="{ name: 'about' }">About</RouterLink>
+      </li>
+    </ul>
 
-      <!-- Contains external links (i.e. to GitHub and LinkedIn) -->
-      <div class="nav-Right">
-        <a href="https://www.linkedin.com/in/kshitij-wadkar-2557852b5/" class="side-Icons">
-          <img src="..\assets\linkedIn-logo.svg" width="50px" class="external-Icons" />
-        </a>
+    <!-- Contains external links (GitHub and LinkedIn) -->
+    <div class="nav-Right">
+      <!--LinkedIn Logo-->
+      <a href="https://www.linkedin.com/in/kshitij-wadkar-2557852b5/">
+        <img src="..\assets\linkedIn-logo.svg" width="50px" class="external-Icons" />
+      </a>
 
-        <a href="https://github.com/k-wadkar/BPHO-CC24">
-          <img src="..\assets\github-logo.svg" width="50px" class="external-Icons" />
-        </a>
-      </div>
-    </nav>
-  </a>
+      <!--GitHub Logo-->
+      <a href="https://github.com/k-wadkar/BPHO-CC24">
+        <img src="..\assets\github-logo.svg" width="50px" class="external-Icons" />
+      </a>
+    </div>
+  </nav>
 </template>
 
 <style scoped>
