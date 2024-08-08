@@ -80,6 +80,7 @@ window.addEventListener('scroll', myScrollFunc)
 <style scoped>
 @import '../assets/base.css';
 
+/* Customisations for jump arror*/
 #jump-Arrow {
   position: fixed;
   transform: rotate(180deg);
@@ -118,6 +119,7 @@ window.addEventListener('scroll', myScrollFunc)
   gap: 1vw;
 }
 
+/* Customisations for the icons on the right side of the navbar */
 .nav-Right a {
   opacity: 1;
   transition: all 0.3s ease 0s;
@@ -126,6 +128,7 @@ window.addEventListener('scroll', myScrollFunc)
 .nav-Right a:hover {
   opacity: 0.75;
 }
+
 /* Switches the colour of the github and linkedIn logo (to black) depending if light mode on */
 .external-Icons {
   filter: invert(75%);
