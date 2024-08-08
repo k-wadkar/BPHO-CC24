@@ -114,9 +114,9 @@ nav {
   transition: all 0.2s ease 0s;
   display: flex;
   align-items: center;
+  z-index: 1;
 }
 
-/* This bit */
 nav ul {
   transition:
     opacity 0.2s,
@@ -153,8 +153,6 @@ nav ul {
 .expanded ul li a:hover {
   color: var(--color-text-hover);
 }
-
-/* Ends here */
 
 #collapse-Arrow {
   cursor: pointer;
