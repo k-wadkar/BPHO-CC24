@@ -8,3 +8,9 @@ import GraphOne from '@/components/graphs/GraphOne.vue'
     <GraphOne />
   </div>
 </template>
+
+<style scoped>
+h1 {
+  text-align: center;
+}
+</style>

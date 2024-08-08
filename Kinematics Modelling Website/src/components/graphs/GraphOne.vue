@@ -111,15 +111,17 @@ const data = computed(() => {
 })
 
 const layout = {
-  title: 'Erm, what the sigma'
-  //paper_bgcolor: 'black',
-  //plot_bgcolor: 'black',
-  //xaxis: { color: 'white' }
+  paper_bgcolor: 'rgba(0, 0, 0, 0)',
+  plot_bgcolor: 'rgba(0, 0, 0, 0)',
+  xaxis: { title: 'Horizontal displacement/m', showgrid: false },
+  yaxis: { title: 'Vertical displacement/m', showgrid: false }
 }
 
 //Other configuration settings for the chart
 const config = {
-  displayModeBar: false
+  displayModeBar: false,
+  scrollZoom: true,
+  responsive: true
 }
 </script>
 
@@ -182,6 +184,7 @@ const config = {
 <style scoped>
 #graphConfig {
   border-spacing: 10px;
+  margin: auto;
 }
 input[type='number'] {
   width: 5rem;
