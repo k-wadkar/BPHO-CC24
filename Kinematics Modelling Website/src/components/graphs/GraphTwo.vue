@@ -28,7 +28,7 @@ const data = computed(() => {
 
   let intervalGap = projectileRange / interval.value
 
-  for (let i = 0; i <= projectileRange; i += intervalGap) {
+  for (let i = 0; i < projectileRange; i += intervalGap) {
     xDisp.push(i)
     yDisp.push(
       initialYDisp.value +
@@ -38,6 +38,9 @@ const data = computed(() => {
           Math.pow(i, 2)
     )
   }
+
+  xDisp.push(projectileRange)
+  yDisp.push(0)
 
   //Apogee plotting
   let apogeeX = (Math.pow(u.value, 2) / g.value) * Math.sin(angleInRads) * Math.cos(angleInRads)
