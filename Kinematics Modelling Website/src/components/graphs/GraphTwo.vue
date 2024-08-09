@@ -8,33 +8,35 @@ let angle = ref(45)
 let g = ref(9.81)
 let u = ref(10)
 let initialYDisp = ref(0)
-let interval = ref(0.01)
+let interval = ref(25)
 
 const data = computed(() => {
   //Empty arrays to contain vertical and horizontal displacements
   const xDisp = []
   const yDisp = []
 
-  let Horizontalu = u.value * Math.cos((angle.value / 180) * Math.PI)
-  let Verticalu = u.value * Math.sin((angle.value / 180) * Math.PI)
+  const angleInRads = (angle.value / 180) * Math.PI
 
-  xDisp.push(0)
-  yDisp.push(initialYDisp.value)
+  const projectileRange =
+    (Math.pow(u.value, 2) / g.value) *
+    (Math.sin(angleInRads) * Math.cos(angleInRads) +
+      Math.cos(angleInRads) *
+        Math.sqrt(
+          Math.pow(Math.sin(angleInRads), 2) +
+            (2 * g.value * initialYDisp.value) / Math.pow(u.value, 2)
+        ))
 
-  //Data points generated according to user-entered function with interval according to user input
+  let intervalGap = projectileRange / interval.value
 
-  while (yDisp[yDisp.length - 1] >= 0) {
-    Verticalu += -1 * g.value * interval.value
-    let newXDisp = xDisp[xDisp.length - 1] + Horizontalu * interval.value
-    let newYDisp = yDisp[yDisp.length - 1] + Verticalu * interval.value
-
-    xDisp.push(newXDisp)
-    yDisp.push(newYDisp)
-  }
-
-  if (yDisp[yDisp.length - 1] < 0) {
-    xDisp.pop()
-    yDisp.pop()
+  for (let i = 0; i <= projectileRange; i += intervalGap) {
+    xDisp.push(i)
+    yDisp.push(
+      initialYDisp.value +
+        i * Math.tan(angleInRads) -
+        (g.value / (2 * Math.pow(u.value, 2))) *
+          (1 + Math.pow(Math.tan(angleInRads), 2)) *
+          Math.pow(i, 2)
+    )
   }
 
   return [{ x: xDisp, y: yDisp, mode: 'lines' }]
@@ -99,12 +101,12 @@ const config = {
       </tr>
 
       <tr>
-        <td><label>Time interval/s</label></td>
+        <td><label>Number of intervals</label></td>
         <td>
-          <input type="number" min="0.001" max="0.1" step="0.001" v-model.number="interval" />
+          <input type="number" min="5" max="1000" step="1" v-model.number="interval" />
         </td>
         <td>
-          <input type="range" min="0.001" max="0.1" step="0.001" v-model.number="interval" />
+          <input type="range" min="5" max="1000" step="1" v-model.number="interval" />
         </td>
       </tr>
     </table>
