@@ -11,7 +11,7 @@ let initialYDisp = ref(0)
 let interval = ref(25)
 
 const data = computed(() => {
-  //Empty arrays to contain vertical and horizontal displacements
+  //Normal projectile path plotting
   const xDisp = []
   const yDisp = []
 
@@ -39,7 +39,22 @@ const data = computed(() => {
     )
   }
 
-  return [{ x: xDisp, y: yDisp, mode: 'lines' }]
+  //Apogee plotting
+  let apogeeX = (Math.pow(u.value, 2) / g.value) * Math.sin(angleInRads) * Math.cos(angleInRads)
+  let apogeeY =
+    initialYDisp.value + (Math.pow(u.value, 2) / 2 / g.value) * Math.pow(Math.sin(angleInRads), 2)
+
+  return [
+    { x: xDisp, y: yDisp, mode: 'lines', name: 'Trajectory' },
+    {
+      x: [apogeeX],
+      y: [apogeeY],
+      type: 'scatter',
+      mode: 'markers',
+      marker: { color: 'orange' },
+      name: 'Apogee'
+    }
+  ]
 })
 
 const layout = {
