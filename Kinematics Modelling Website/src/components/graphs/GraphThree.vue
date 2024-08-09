@@ -84,10 +84,16 @@ const data = computed(() => {
 
   minU =
     Math.sqrt(g.value) *
-    Math.sqrt(targetY.value + Math.sqrt(Math.pow(targetX.value, 2) + Math.pow(targetY.value, 2)))
+    Math.sqrt(
+      targetY.value -
+        h.value +
+        Math.sqrt(Math.pow(targetX.value, 2) + Math.pow(targetY.value - h.value, 2))
+    )
 
   const minUAngleInRads = Math.atan(
-    (targetY.value + Math.sqrt(Math.pow(targetX.value, 2) + Math.pow(targetY.value, 2))) /
+    (targetY.value -
+      h.value +
+      Math.sqrt(Math.pow(targetX.value, 2) + Math.pow(targetY.value - h.value, 2))) /
       targetX.value
   )
 
@@ -162,7 +168,7 @@ const config = {
     <VuePlotly :data="data" :layout="layout" :config="config"></VuePlotly>
 
     <p style="text-align: center">
-      <em>Current minimum u value: {{ Math.round(minU) }}ms⁻¹</em>
+      <em>Current minimum u value: ~{{ Math.round(minU) }}ms⁻¹</em>
     </p>
 
     <br />
