@@ -8,8 +8,8 @@ import GraphThree from '@/components/graphs/GraphThree.vue'
     <br />
     <p>
       <em
-        >Note: If nothing is showing on the graph, this means it is not possible for a particle with
-        the given characteristics to pass through the target point.</em
+        >Note: If the highball and lowball traces are not showing up, this means it is not possible
+        for a particle with the specified characteristics to pass through the target point.</em
       >
     </p>
     <GraphThree />
