@@ -54,7 +54,7 @@ const data = computed(() => {
       y: [apogeeY],
       type: 'scatter',
       mode: 'markers',
-      marker: { color: 'orange' },
+      marker: { color: 'red' },
       name: 'Apogee'
     }
   ]
