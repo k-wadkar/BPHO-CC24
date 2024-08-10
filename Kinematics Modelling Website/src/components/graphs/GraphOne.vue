@@ -20,7 +20,9 @@ const data = computed(() => {
     angle.value,
     interval.value
   )
-  return [{ x: trajectoryCoords[0], y: trajectoryCoords[1], mode: 'lines' }]
+  return [
+    { x: trajectoryCoords[0], y: trajectoryCoords[1], mode: 'lines', line: { color: 'dodgerblue' } }
+  ]
 })
 
 const layout = {

@@ -4,6 +4,8 @@ import { VuePlotly } from '@clalarco/vue3-plotly'
 //Vue modules which allow reactive referencing, and dynamic computing of variables
 import { ref, computed } from 'vue'
 
+import { analyticalTrajectoryCoords, calculateProjectileRange, deg } from './utils.js'
+
 let angle = ref(65)
 let g = ref(9.81)
 let u = ref(10)
@@ -15,68 +17,48 @@ let maxProjectileRange = 0
 
 const data = computed(() => {
   //Normal projectile path plotting
-  const xDisp = []
-  const yDisp = []
-
-  const angleInRads = (angle.value / 180) * Math.PI
-
-  const projectileRange =
-    (Math.pow(u.value, 2) / g.value) *
-    (Math.sin(angleInRads) * Math.cos(angleInRads) +
-      Math.cos(angleInRads) *
-        Math.sqrt(
-          Math.pow(Math.sin(angleInRads), 2) + (2 * g.value * h.value) / Math.pow(u.value, 2)
-        ))
-
-  let intervalGap = projectileRange / interval.value
-
-  for (let i = 0; i < projectileRange; i += intervalGap) {
-    xDisp.push(i)
-    yDisp.push(
-      h.value +
-        i * Math.tan(angleInRads) -
-        (g.value / (2 * Math.pow(u.value, 2))) *
-          (1 + Math.pow(Math.tan(angleInRads), 2)) *
-          Math.pow(i, 2)
-    )
-  }
-
-  xDisp.push(projectileRange)
-  yDisp.push(0)
+  let trajectoryCoords = analyticalTrajectoryCoords(
+    u.value,
+    g.value,
+    h.value,
+    angle.value,
+    interval.value
+  )
 
   //Max range trajectory plotting
-  const maxXDisp = []
-  const maxYDisp = []
-
   maxAngleInRads = Math.asin(1 / Math.sqrt(2 + (2 * g.value * h.value) / Math.pow(u.value, 2)))
 
-  maxProjectileRange =
-    (Math.pow(u.value, 2) / g.value) *
-    (Math.sin(maxAngleInRads) * Math.cos(maxAngleInRads) +
-      Math.cos(maxAngleInRads) *
-        Math.sqrt(
-          Math.pow(Math.sin(maxAngleInRads), 2) + (2 * g.value * h.value) / Math.pow(u.value, 2)
-        ))
+  maxProjectileRange = calculateProjectileRange(
+    u.value,
+    g.value,
+    h.value,
+    deg(maxAngleInRads),
+    interval.value
+  )
 
-  let maxIntervalGap = maxProjectileRange / interval.value
-
-  for (let i = 0; i < maxProjectileRange; i += maxIntervalGap) {
-    maxXDisp.push(i)
-    maxYDisp.push(
-      h.value +
-        i * Math.tan(maxAngleInRads) -
-        (g.value / (2 * Math.pow(u.value, 2))) *
-          (1 + Math.pow(Math.tan(maxAngleInRads), 2)) *
-          Math.pow(i, 2)
-    )
-  }
-
-  maxXDisp.push(maxProjectileRange)
-  maxYDisp.push(0)
+  let maxTrajCoords = analyticalTrajectoryCoords(
+    u.value,
+    g.value,
+    h.value,
+    deg(maxAngleInRads),
+    interval.value
+  )
 
   return [
-    { x: xDisp, y: yDisp, mode: 'lines', name: 'Input Trajectory' },
-    { x: maxXDisp, y: maxYDisp, mode: 'lines', name: 'Max horizontal range trajectory' }
+    {
+      x: trajectoryCoords[0],
+      y: trajectoryCoords[1],
+      mode: 'lines',
+      line: { color: 'dodgerblue' },
+      name: 'Input'
+    },
+    {
+      x: maxTrajCoords[0],
+      y: maxTrajCoords[1],
+      mode: 'lines',
+      line: { color: 'lightgreen' },
+      name: 'Max horizontal range'
+    }
   ]
 })
 

@@ -4,6 +4,8 @@ import { VuePlotly } from '@clalarco/vue3-plotly'
 //Vue modules which allow reactive referencing, and dynamic computing of variables
 import { ref, computed } from 'vue'
 
+import { analyticalTrajectoryCoords, deg } from './utils.js'
+
 let g = ref(9.81)
 let u = ref(25)
 let h = ref(10)
@@ -20,67 +22,28 @@ const data = computed(() => {
     targetY.value - h.value + (g.value * Math.pow(targetX.value, 2)) / 2 / Math.pow(u.value, 2)
 
   //Finds the trajectory angle for the lowball and highball
-  const lowAngleInRads = Math.atan((-b - Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / 2 / a)
-  const highAngleInRads = Math.atan((-b + Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / 2 / a)
+  const lowAngleInDeg = deg(Math.atan((-b - Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / 2 / a))
+  const highAngleInDeg = deg(Math.atan((-b + Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / 2 / a))
 
   //Contains coordinates for lowball arc
-  const lowXDisp = []
-  const lowYDisp = []
+  const lowCoords = analyticalTrajectoryCoords(
+    u.value,
+    g.value,
+    h.value,
+    lowAngleInDeg,
+    interval.value
+  )
 
   //Contains coordinates for highball arc
-  const highXDisp = []
-  const highYDisp = []
-
-  const lowProjectileRange =
-    (Math.pow(u.value, 2) / g.value) *
-    (Math.sin(lowAngleInRads) * Math.cos(lowAngleInRads) +
-      Math.cos(lowAngleInRads) *
-        Math.sqrt(
-          Math.pow(Math.sin(lowAngleInRads), 2) + (2 * g.value * h.value) / Math.pow(u.value, 2)
-        ))
-
-  const highProjectileRange =
-    (Math.pow(u.value, 2) / g.value) *
-    (Math.sin(highAngleInRads) * Math.cos(highAngleInRads) +
-      Math.cos(highAngleInRads) *
-        Math.sqrt(
-          Math.pow(Math.sin(highAngleInRads), 2) + (2 * g.value * h.value) / Math.pow(u.value, 2)
-        ))
-
-  let lowIntervalGap = lowProjectileRange / interval.value
-  let highIntervalGap = highProjectileRange / interval.value
-
-  for (let i = 0; i < lowProjectileRange; i += lowIntervalGap) {
-    lowXDisp.push(i)
-    lowYDisp.push(
-      h.value +
-        i * Math.tan(lowAngleInRads) -
-        (g.value / (2 * Math.pow(u.value, 2))) *
-          (1 + Math.pow(Math.tan(lowAngleInRads), 2)) *
-          Math.pow(i, 2)
-    )
-  }
-
-  lowXDisp.push(lowProjectileRange)
-  lowYDisp.push(0)
-
-  for (let i = 0; i < highProjectileRange; i += highIntervalGap) {
-    highXDisp.push(i)
-    highYDisp.push(
-      h.value +
-        i * Math.tan(highAngleInRads) -
-        (g.value / (2 * Math.pow(u.value, 2))) *
-          (1 + Math.pow(Math.tan(highAngleInRads), 2)) *
-          Math.pow(i, 2)
-    )
-  }
-
-  highXDisp.push(highProjectileRange)
-  highYDisp.push(0)
+  const highCoords = analyticalTrajectoryCoords(
+    u.value,
+    g.value,
+    h.value,
+    highAngleInDeg,
+    interval.value
+  )
 
   // This bit calculates the min-u arrays
-  const minUXDisp = []
-  const minUYDisp = []
 
   minU =
     Math.sqrt(g.value) *
@@ -97,42 +60,32 @@ const data = computed(() => {
       targetX.value
   )
 
-  const minUProjectileRange =
-    (Math.pow(minU, 2) / g.value) *
-    (Math.sin(minUAngleInRads) * Math.cos(minUAngleInRads) +
-      Math.cos(minUAngleInRads) *
-        Math.sqrt(
-          Math.pow(Math.sin(minUAngleInRads), 2) + (2 * g.value * h.value) / Math.pow(minU, 2)
-        ))
-
-  let minUIntervalGap = minUProjectileRange / interval.value
-
-  for (let i = 0; i < minUProjectileRange; i += minUIntervalGap) {
-    minUXDisp.push(i)
-    minUYDisp.push(
-      h.value +
-        i * Math.tan(minUAngleInRads) -
-        (g.value / (2 * Math.pow(minU, 2))) *
-          (1 + Math.pow(Math.tan(minUAngleInRads), 2)) *
-          Math.pow(i, 2)
-    )
-  }
-
-  minUXDisp.push(minUProjectileRange)
-  minUYDisp.push(0)
+  const minUCoords = analyticalTrajectoryCoords(
+    minU,
+    g.value,
+    h.value,
+    deg(minUAngleInRads),
+    interval.value
+  )
 
   return [
-    { x: lowXDisp, y: lowYDisp, mode: 'lines', line: { color: 'orange' }, name: 'Lowball' },
     {
-      x: highXDisp,
-      y: highYDisp,
+      x: lowCoords[0],
+      y: lowCoords[1],
       mode: 'lines',
-      line: { color: 'cornflowerblue' },
+      line: { color: 'darkorange' },
+      name: 'Lowball'
+    },
+    {
+      x: highCoords[0],
+      y: highCoords[1],
+      mode: 'lines',
+      line: { color: 'slateblue' },
       name: 'Highball'
     },
     {
-      x: minUXDisp,
-      y: minUYDisp,
+      x: minUCoords[0],
+      y: minUCoords[1],
       mode: 'lines',
       line: { color: 'grey' },
       name: 'Minimum u'

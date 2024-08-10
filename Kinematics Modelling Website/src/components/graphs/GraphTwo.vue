@@ -4,6 +4,8 @@ import { VuePlotly } from '@clalarco/vue3-plotly'
 //Vue modules which allow reactive referencing, and dynamic computing of variables
 import { ref, computed } from 'vue'
 
+import { analyticalTrajectoryCoords, rad } from './utils.js'
+
 let angle = ref(45)
 let g = ref(9.81)
 let u = ref(10)
@@ -11,50 +13,36 @@ let initialYDisp = ref(0)
 let interval = ref(25)
 
 const data = computed(() => {
-  //Normal projectile path plotting
-  const xDisp = []
-  const yDisp = []
+  // Normal trajectory coords
+  let trajectoryCoords = analyticalTrajectoryCoords(
+    u.value,
+    g.value,
+    initialYDisp.value,
+    angle.value,
+    interval.value
+  )
 
-  const angleInRads = (angle.value / 180) * Math.PI
-
-  const projectileRange =
-    (Math.pow(u.value, 2) / g.value) *
-    (Math.sin(angleInRads) * Math.cos(angleInRads) +
-      Math.cos(angleInRads) *
-        Math.sqrt(
-          Math.pow(Math.sin(angleInRads), 2) +
-            (2 * g.value * initialYDisp.value) / Math.pow(u.value, 2)
-        ))
-
-  let intervalGap = projectileRange / interval.value
-
-  for (let i = 0; i < projectileRange; i += intervalGap) {
-    xDisp.push(i)
-    yDisp.push(
-      initialYDisp.value +
-        i * Math.tan(angleInRads) -
-        (g.value / (2 * Math.pow(u.value, 2))) *
-          (1 + Math.pow(Math.tan(angleInRads), 2)) *
-          Math.pow(i, 2)
-    )
-  }
-
-  xDisp.push(projectileRange)
-  yDisp.push(0)
-
-  //Apogee plotting
-  let apogeeX = (Math.pow(u.value, 2) / g.value) * Math.sin(angleInRads) * Math.cos(angleInRads)
+  // Apogee plotting
+  let apogeeX =
+    (Math.pow(u.value, 2) / g.value) * Math.sin(rad(angle.value)) * Math.cos(rad(angle.value))
   let apogeeY =
-    initialYDisp.value + (Math.pow(u.value, 2) / 2 / g.value) * Math.pow(Math.sin(angleInRads), 2)
+    initialYDisp.value +
+    (Math.pow(u.value, 2) / 2 / g.value) * Math.pow(Math.sin(rad(angle.value)), 2)
 
   return [
-    { x: xDisp, y: yDisp, mode: 'lines', name: 'Trajectory' },
+    {
+      x: trajectoryCoords[0],
+      y: trajectoryCoords[1],
+      mode: 'lines',
+      line: { color: 'dodgerblue' },
+      name: 'Input'
+    },
     {
       x: [apogeeX],
       y: [apogeeY],
       type: 'scatter',
       mode: 'markers',
-      marker: { color: 'red' },
+      marker: { color: 'goldenrod' },
       name: 'Apogee'
     }
   ]

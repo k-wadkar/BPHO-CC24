@@ -1,6 +1,12 @@
 <template>
   <div class="rootElement">
     <h1 style="padding: 10px">Task Overviews</h1>
+    <p>
+      input/trajectory - dodgerblue<br />
+      apogee - goldenrod<br />highball - slateblue<br />lowball - darkorange<br />minimum u -
+      grey<br />max horizontal range - lightgreen<br />bounding curve - violet<br />target - red
+    </p>
+    <br /><br />
     <p>Scroll down this page to see the result.</p>
     <p>Scroll down this page to see the result.</p>
     <p>Scroll down this page to see the result.</p>
