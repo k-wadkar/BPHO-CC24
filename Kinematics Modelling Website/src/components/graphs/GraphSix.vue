@@ -4,45 +4,34 @@ import { VuePlotly } from '@clalarco/vue3-plotly'
 //Vue modules which allow reactive referencing, and dynamic computing of variables
 import { ref, computed } from 'vue'
 
-import { analyticalTrajectoryCoords, calculateHorizontalProjectileRange, deg } from './utils.js'
+import { analyticalTrajectoryCoords, rad, calculateDistanceTravelled } from './utils.js'
 
-let angle = ref(65)
+let angle = ref(45)
 let g = ref(9.81)
 let u = ref(10)
-let h = ref(10)
+let initialYDisp = ref(0)
 let interval = ref(50)
-
-let maxAngleInRads = 0
-let maxHorizontalProjectileRange = 0
+let distanceTravelled = 0
 
 const data = computed(() => {
-  //Normal projectile path plotting
+  // Normal trajectory coords
   let trajectoryCoords = analyticalTrajectoryCoords(
     u.value,
     g.value,
-    h.value,
+    initialYDisp.value,
     angle.value,
     interval.value
   )
 
-  //Max range trajectory plotting
-  maxAngleInRads = Math.asin(1 / Math.sqrt(2 + (2 * g.value * h.value) / Math.pow(u.value, 2)))
+  // Apogee plotting
+  let apogeeX =
+    (Math.pow(u.value, 2) / g.value) * Math.sin(rad(angle.value)) * Math.cos(rad(angle.value))
+  let apogeeY =
+    initialYDisp.value +
+    (Math.pow(u.value, 2) / 2 / g.value) * Math.pow(Math.sin(rad(angle.value)), 2)
 
-  maxHorizontalProjectileRange = calculateHorizontalProjectileRange(
-    u.value,
-    g.value,
-    h.value,
-    deg(maxAngleInRads),
-    interval.value
-  )
-
-  let maxTrajCoords = analyticalTrajectoryCoords(
-    u.value,
-    g.value,
-    h.value,
-    deg(maxAngleInRads),
-    interval.value
-  )
+  //Update distance travelled
+  distanceTravelled = calculateDistanceTravelled(u.value, g.value, initialYDisp.value, angle.value)
 
   return [
     {
@@ -53,11 +42,12 @@ const data = computed(() => {
       name: 'Input'
     },
     {
-      x: maxTrajCoords[0],
-      y: maxTrajCoords[1],
-      mode: 'lines',
-      line: { color: 'lightgreen' },
-      name: 'Max horizontal range'
+      x: [apogeeX],
+      y: [apogeeY],
+      type: 'scatter',
+      mode: 'markers',
+      marker: { color: 'goldenrod' },
+      name: 'Apogee'
     }
   ]
 })
@@ -82,9 +72,7 @@ const config = {
     <VuePlotly :data="data" :layout="layout" :config="config"></VuePlotly>
 
     <p style="text-align: center">
-      <em>Current optimum angle: ~{{ Math.round((maxAngleInRads / Math.PI) * 180) }}°</em>
-      <br />
-      <em>Current maximum horizontal range: ~{{ Math.round(maxHorizontalProjectileRange) }}m</em>
+      <em>Length of trajectory: ~{{ Math.round(distanceTravelled) }}m</em>
     </p>
     <br />
 
@@ -120,10 +108,10 @@ const config = {
       <tr>
         <td><label>Initial height/m</label></td>
         <td>
-          <input type="number" max="100" min="0" step="0.01" v-model.number="h" />
+          <input type="number" max="100" min="0" step="0.01" v-model.number="initialYDisp" />
         </td>
         <td>
-          <input type="range" max="100" min="0" step="0.01" v-model.number="h" />
+          <input type="range" max="100" min="0" step="0.01" v-model.number="initialYDisp" />
         </td>
       </tr>
 

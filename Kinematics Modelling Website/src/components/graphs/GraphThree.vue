@@ -121,7 +121,7 @@ const config = {
     <VuePlotly :data="data" :layout="layout" :config="config"></VuePlotly>
 
     <p style="text-align: center">
-      <em>Current minimum u value: ~{{ Math.round(minU) }}ms⁻¹</em>
+      <em>Current minimum u value: ~{{ Math.ceil(minU) }}ms⁻¹</em>
     </p>
 
     <br />

@@ -6,7 +6,7 @@ import { ref, computed } from 'vue'
 
 import {
   analyticalTrajectoryCoords,
-  calculateProjectileRange,
+  calculateHorizontalProjectileRange,
   deg,
   calculateBoundingCoords
 } from './utils.js'
@@ -17,10 +17,10 @@ let u = ref(30)
 let h = ref(20)
 let targetX = ref(10)
 let targetY = ref(40)
-let interval = ref(25)
+let interval = ref(50)
 
 let maxAngleInRads = 0
-let maxProjectileRange = 0
+let maxHorizontalProjectileRange = 0
 let minU = 0
 
 const data = computed(() => {
@@ -79,7 +79,7 @@ const data = computed(() => {
   //Max Range
   maxAngleInRads = Math.asin(1 / Math.sqrt(2 + (2 * g.value * h.value) / Math.pow(u.value, 2)))
 
-  maxProjectileRange = calculateProjectileRange(
+  maxHorizontalProjectileRange = calculateHorizontalProjectileRange(
     u.value,
     g.value,
     h.value,
@@ -87,7 +87,7 @@ const data = computed(() => {
     interval.value
   )
 
-  console.log(maxProjectileRange)
+  console.log(maxHorizontalProjectileRange)
 
   let maxTrajCoords = analyticalTrajectoryCoords(
     u.value,
@@ -133,7 +133,7 @@ const data = computed(() => {
       x: boundingCoords[0],
       y: boundingCoords[1],
       mode: 'lines',
-      line: { color: 'violet' },
+      line: { color: 'violet', dash: 'dot' },
       name: 'Bounding curve'
     },
     {
@@ -167,11 +167,11 @@ const config = {
     <VuePlotly :data="data" :layout="layout" :config="config"></VuePlotly>
 
     <p style="text-align: center">
-      <em>Current minimum u value: ~{{ Math.round(minU) }}ms⁻¹</em>
+      <em>Current minimum u value: ~{{ Math.ceil(minU) }}ms⁻¹</em>
       <br />
       <em>Current optimum angle: ~{{ Math.round((maxAngleInRads / Math.PI) * 180) }}°</em>
       <br />
-      <em>Current maximum horizontal range: ~{{ Math.round(maxProjectileRange) }}m</em>
+      <em>Current maximum horizontal range: ~{{ Math.round(maxHorizontalProjectileRange) }}m</em>
     </p>
     <br />
 

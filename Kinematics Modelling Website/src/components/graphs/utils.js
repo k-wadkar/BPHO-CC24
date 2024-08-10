@@ -1,8 +1,9 @@
 export {
   fixedTimestepTrajectoryCoords,
   analyticalTrajectoryCoords,
-  calculateProjectileRange,
+  calculateHorizontalProjectileRange,
   calculateBoundingCoords,
+  calculateDistanceTravelled,
   rad,
   deg
 }
@@ -13,8 +14,8 @@ function fixedTimestepTrajectoryCoords(u, g, h, thetaInDeg, timeInterval) {
   const yDisp = []
 
   //Calculates the horizontal and vertical components of u
-  let Horizontalu = u * Math.cos((thetaInDeg / 180) * Math.PI)
-  let Verticalu = u * Math.sin((thetaInDeg / 180) * Math.PI)
+  let Horizontalu = u * cos(rad(thetaInDeg))
+  let Verticalu = u * sin(rad(thetaInDeg))
 
   //Y-intercept values pushed to coords arrays
   xDisp.push(0)
@@ -43,9 +44,9 @@ function analyticalTrajectoryCoords(u, g, h, thetaInDeg, numIntervals) {
   const xDisp = []
   const yDisp = []
 
-  const thetaInRad = (thetaInDeg / 180) * Math.PI
+  const thetaInRad = rad(thetaInDeg)
 
-  const projectileRange = calculateProjectileRange(u, g, h, deg(thetaInRad))
+  const projectileRange = calculateHorizontalProjectileRange(u, g, h, thetaInDeg)
 
   let intervalGap = projectileRange / numIntervals
 
@@ -53,8 +54,8 @@ function analyticalTrajectoryCoords(u, g, h, thetaInDeg, numIntervals) {
     xDisp.push(i)
     yDisp.push(
       h +
-        i * Math.tan(thetaInRad) -
-        (g / (2 * Math.pow(u, 2))) * (1 + Math.pow(Math.tan(thetaInRad), 2)) * Math.pow(i, 2)
+        i * tan(thetaInRad) -
+        (g / (2 * square(u))) * (1 + square(Math.tan(thetaInRad))) * square(i)
     )
   }
 
@@ -68,16 +69,16 @@ function calculateBoundingCoords(u, g, h, numIntervals) {
   const xDisp = []
   const yDisp = []
 
-  const a = -g / 2 / Math.pow(u, 2)
-  const c = Math.pow(u, 2) / 2 / g + h
+  const a = -g / 2 / square(u)
+  const c = square(u) / 2 / g + h
 
-  const xIntersect = -Math.sqrt(-4 * a * c) / 2 / a
+  const xIntersect = -sqrt(-4 * a * c) / 2 / a
 
   let intervalGap = xIntersect / numIntervals
 
   for (let i = 0; i < xIntersect; i += intervalGap) {
     xDisp.push(i)
-    yDisp.push(c + a * Math.pow(i, 2))
+    yDisp.push(c + a * square(i))
   }
 
   xDisp.push(xIntersect)
@@ -86,19 +87,55 @@ function calculateBoundingCoords(u, g, h, numIntervals) {
   return [xDisp, yDisp]
 }
 
-function calculateProjectileRange(u, g, h, thetaInDeg) {
+function calculateHorizontalProjectileRange(u, g, h, thetaInDeg) {
   return (
-    (Math.pow(u, 2) / g) *
-    (Math.sin(rad(thetaInDeg)) * Math.cos(rad(thetaInDeg)) +
-      Math.cos(rad(thetaInDeg)) *
-        Math.sqrt(Math.pow(Math.sin(rad(thetaInDeg)), 2) + (2 * g * h) / Math.pow(u, 2)))
+    (square(u) / g) *
+    (sin(rad(thetaInDeg)) * cos(rad(thetaInDeg)) +
+      cos(rad(thetaInDeg)) * sqrt(square(sin(rad(thetaInDeg))) + (2 * g * h) / square(u)))
   )
+}
+
+function calculateDistanceTravelled(u, g, h, thetaInDeg) {
+  let thetaInRad = rad(thetaInDeg)
+
+  let a = square(u) / (g * (1 + square(tan(thetaInRad))))
+  let b = tan(thetaInRad)
+  let c =
+    tan(thetaInRad) -
+    (g * calculateHorizontalProjectileRange(u, g, h, thetaInDeg) * (1 + square(tan(thetaInRad)))) /
+      square(u)
+
+  function integralExpression(z) {
+    return 0.5 * Math.log(Math.abs(sqrt(1 + square(z)) + z)) + 0.5 * z * sqrt(1 + square(z))
+  }
+
+  return a * (integralExpression(b) - integralExpression(c))
 }
 
 function rad(angleInDeg) {
   return (angleInDeg / 180) * Math.PI
 }
 
-function deg(angleInDeg) {
-  return (angleInDeg / Math.PI) * 180
+function deg(angleInRad) {
+  return (angleInRad / Math.PI) * 180
+}
+
+function sin(angleInRad) {
+  return Math.sin(angleInRad)
+}
+
+function cos(angleInRad) {
+  return Math.cos(angleInRad)
+}
+
+function tan(angleInRad) {
+  return Math.tan(angleInRad)
+}
+
+function square(input) {
+  return Math.pow(input, 2)
+}
+
+function sqrt(input) {
+  return Math.sqrt(input)
 }

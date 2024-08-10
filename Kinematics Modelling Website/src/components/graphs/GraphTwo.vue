@@ -10,7 +10,7 @@ let angle = ref(45)
 let g = ref(9.81)
 let u = ref(10)
 let initialYDisp = ref(0)
-let interval = ref(25)
+let interval = ref(50)
 
 const data = computed(() => {
   // Normal trajectory coords
