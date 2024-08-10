@@ -6,11 +6,17 @@ export {
   calculateBoundingCoords,
   calculateDistanceTravelled,
   calculateMaximaCoords,
+  calculateMinimaCoords,
   calculateInstantaneousRange,
+  analyticalRangeCoords,
+  calculateMaximaRange,
+  calculateMinimaRange,
   rad,
   deg
 }
 
+//Returns an array containing an array of x-values and a corresponding array of y-values
+//Calculations made using discrete timesteps
 function fixedTimestepTrajectoryCoords(u, g, h, thetaInDeg, timeInterval) {
   //Empty arrays to contain vertical and horizontal displacements
   const xDisp = []
@@ -43,6 +49,8 @@ function fixedTimestepTrajectoryCoords(u, g, h, thetaInDeg, timeInterval) {
   return [xDisp, yDisp]
 }
 
+//Returns an array containing an array of x-values and a corresponding array of y-values
+//Calculations made using mathematical formulae (i.e. analytical method)
 function analyticalTrajectoryCoords(u, g, h, thetaInDeg, numIntervals) {
   const xDisp = []
   const yDisp = []
@@ -68,6 +76,7 @@ function analyticalTrajectoryCoords(u, g, h, thetaInDeg, numIntervals) {
   return [xDisp, yDisp]
 }
 
+//Same as above but returns values below y=0 as per the specified underflow
 function analyticalTrajectoryCoordsExtra(u, g, h, thetaInDeg, numIntervals, underflow) {
   const xDisp = []
   const yDisp = []
@@ -94,6 +103,8 @@ function analyticalTrajectoryCoordsExtra(u, g, h, thetaInDeg, numIntervals, unde
   return [xDisp, yDisp]
 }
 
+//Returns an array containing an array of x-values and a corresponding array of y-values
+//Coords relate to the 'bounding parabola' for trajectories passing through a given point
 function calculateBoundingCoords(u, g, h, numIntervals) {
   const xDisp = []
   const yDisp = []
@@ -116,6 +127,7 @@ function calculateBoundingCoords(u, g, h, numIntervals) {
   return [xDisp, yDisp]
 }
 
+//Calculates maximum x-value when y=0
 function calculateHorizontalProjectileRange(u, g, h, thetaInDeg) {
   return (
     (square(u) / g) *
@@ -124,6 +136,7 @@ function calculateHorizontalProjectileRange(u, g, h, thetaInDeg) {
   )
 }
 
+//Calculates the length of a parabolic arc (i.e. the distance travelled by a projectile)
 function calculateDistanceTravelled(u, g, h, thetaInDeg) {
   let thetaInRad = rad(thetaInDeg)
 
@@ -141,6 +154,7 @@ function calculateDistanceTravelled(u, g, h, thetaInDeg) {
   return a * (integralExpression(b) - integralExpression(c))
 }
 
+//Determines the coordinates for a range local maximum
 function calculateMaximaCoords(u, g, h, thetaInDeg) {
   if (thetaInDeg < 70.5) {
     return null
@@ -157,6 +171,79 @@ function calculateMaximaCoords(u, g, h, thetaInDeg) {
   return [xVal, yVal]
 }
 
+//Determines the coordinates for a range local minimum
+function calculateMinimaCoords(u, g, h, thetaInDeg) {
+  if (thetaInDeg < 70.5) {
+    return null
+  }
+
+  let thetaInRad = rad(thetaInDeg)
+
+  let maximaTime = ((3 * u) / 2 / g) * (sin(thetaInRad) + sqrt(square(sin(thetaInRad)) - 8 / 9))
+
+  let xVal = maximaTime * u * cos(thetaInRad)
+  let yVal =
+    h + xVal * tan(thetaInRad) - (g / 2 / square(u)) * (1 + square(tan(thetaInRad))) * square(xVal)
+
+  return [xVal, yVal]
+}
+
+//Determines the range of a local maximum if it occurs
+function calculateMaximaRange(u, g, h, thetaInDeg) {
+  if (thetaInDeg < 70.5) {
+    return null
+  }
+
+  let thetaInRad = rad(thetaInDeg)
+
+  let maximaTime = ((3 * u) / 2 / g) * (sin(thetaInRad) - sqrt(square(sin(thetaInRad)) - 8 / 9))
+
+  let maximaRange = calculateInstantaneousRange(u, g, maximaTime, thetaInDeg)
+
+  return [maximaTime, maximaRange]
+}
+
+//Determines the range of a local minimum if it occurs
+function calculateMinimaRange(u, g, h, thetaInDeg) {
+  if (thetaInDeg < 70.5) {
+    return null
+  }
+
+  let thetaInRad = rad(thetaInDeg)
+
+  let minimaTime = ((3 * u) / 2 / g) * (sin(thetaInRad) + sqrt(square(sin(thetaInRad)) - 8 / 9))
+
+  let minimaRange = calculateInstantaneousRange(u, g, minimaTime, thetaInDeg)
+
+  return [minimaTime, minimaRange]
+}
+
+//Returns an array containing an array of x-values and a corresponding array of y-values
+//Coords correspond to a range vs time graph
+function analyticalRangeCoords(u, g, h, thetaInDeg, numIntervals, underflow) {
+  let instantaneousTime = []
+  let range = []
+
+  let thetaInRad = rad(thetaInDeg)
+
+  let a = (-g / 2 / square(u)) * (1 + square(tan(thetaInRad)))
+  let b = tan(thetaInRad)
+  let c = h - underflow
+
+  let maxXVal = (-b - sqrt(square(b) - 4 * a * c)) / 2 / a
+  let maxTime = maxXVal / u / cos(thetaInRad)
+
+  let intervalGap = maxTime / numIntervals
+
+  for (let i = 0; i <= maxTime; i += intervalGap) {
+    instantaneousTime.push(i)
+    range.push(calculateInstantaneousRange(u, g, i, thetaInDeg))
+  }
+
+  return [instantaneousTime, range]
+}
+
+//Calculates the instantaneous distance of a projectile from its initial launch position
 function calculateInstantaneousRange(u, g, t, thetaInDeg) {
   return sqrt(
     square(u) * square(t) -
@@ -165,30 +252,37 @@ function calculateInstantaneousRange(u, g, t, thetaInDeg) {
   )
 }
 
+//Converts from degrees to radians
 function rad(angleInDeg) {
   return (angleInDeg / 180) * Math.PI
 }
 
+//Vice versa
 function deg(angleInRad) {
   return (angleInRad / Math.PI) * 180
 }
 
+//Sine shorthand
 function sin(angleInRad) {
   return Math.sin(angleInRad)
 }
 
+//Ditto
 function cos(angleInRad) {
   return Math.cos(angleInRad)
 }
 
+//Ditto
 function tan(angleInRad) {
   return Math.tan(angleInRad)
 }
 
+//Squares input
 function square(input) {
   return Math.pow(input, 2)
 }
 
+//Square roots input
 function sqrt(input) {
   return Math.sqrt(input)
 }
