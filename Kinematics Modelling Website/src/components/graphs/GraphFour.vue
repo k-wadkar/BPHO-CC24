@@ -76,7 +76,7 @@ const data = computed(() => {
 
   return [
     { x: xDisp, y: yDisp, mode: 'lines', name: 'Input Trajectory' },
-    { x: maxXDisp, y: maxYDisp, mode: 'lines', name: 'Max range trajectory' }
+    { x: maxXDisp, y: maxYDisp, mode: 'lines', name: 'Max horizontal range trajectory' }
   ]
 })
 
@@ -89,7 +89,7 @@ const layout = {
 
 //Other configuration settings for the chart
 const config = {
-  displayModeBar: false,
+  //displayModeBar: false,
   scrollZoom: true,
   responsive: true
 }
@@ -102,7 +102,7 @@ const config = {
     <p style="text-align: center">
       <em>Current optimum angle: ~{{ Math.round((maxAngleInRads / Math.PI) * 180) }}°</em>
       <br />
-      <em>Current maximum range: ~{{ Math.round(maxProjectileRange) }}m</em>
+      <em>Current maximum horizontal range: ~{{ Math.round(maxProjectileRange) }}m</em>
     </p>
     <br />
 

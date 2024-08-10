@@ -69,7 +69,7 @@ const layout = {
 
 //Other configuration settings for the chart
 const config = {
-  displayModeBar: false,
+  //displayModeBar: false,
   scrollZoom: true,
   responsive: true
 }
