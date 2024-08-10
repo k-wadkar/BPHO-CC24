@@ -1,9 +1,12 @@
 export {
   fixedTimestepTrajectoryCoords,
   analyticalTrajectoryCoords,
+  analyticalTrajectoryCoordsExtra,
   calculateHorizontalProjectileRange,
   calculateBoundingCoords,
   calculateDistanceTravelled,
+  calculateMaximaCoords,
+  calculateInstantaneousRange,
   rad,
   deg
 }
@@ -65,6 +68,32 @@ function analyticalTrajectoryCoords(u, g, h, thetaInDeg, numIntervals) {
   return [xDisp, yDisp]
 }
 
+function analyticalTrajectoryCoordsExtra(u, g, h, thetaInDeg, numIntervals, underflow) {
+  const xDisp = []
+  const yDisp = []
+
+  const thetaInRad = rad(thetaInDeg)
+
+  const projectileRange = calculateHorizontalProjectileRange(u, g, h, thetaInDeg)
+
+  let intervalGap = projectileRange / numIntervals
+
+  let i = 0
+  let y = 0
+
+  while (y >= underflow) {
+    xDisp.push(i)
+    y =
+      h +
+      i * tan(thetaInRad) -
+      (g / (2 * square(u))) * (1 + square(Math.tan(thetaInRad))) * square(i)
+    yDisp.push(y)
+    i += intervalGap
+  }
+
+  return [xDisp, yDisp]
+}
+
 function calculateBoundingCoords(u, g, h, numIntervals) {
   const xDisp = []
   const yDisp = []
@@ -110,6 +139,30 @@ function calculateDistanceTravelled(u, g, h, thetaInDeg) {
   }
 
   return a * (integralExpression(b) - integralExpression(c))
+}
+
+function calculateMaximaCoords(u, g, h, thetaInDeg) {
+  if (thetaInDeg < 70.5) {
+    return null
+  }
+
+  let thetaInRad = rad(thetaInDeg)
+
+  let maximaTime = ((3 * u) / 2 / g) * (sin(thetaInRad) - sqrt(square(sin(thetaInRad)) - 8 / 9))
+
+  let xVal = maximaTime * u * cos(thetaInRad)
+  let yVal =
+    h + xVal * tan(thetaInRad) - (g / 2 / square(u)) * (1 + square(tan(thetaInRad))) * square(xVal)
+
+  return [xVal, yVal]
+}
+
+function calculateInstantaneousRange(u, g, t, thetaInDeg) {
+  return sqrt(
+    square(u) * square(t) -
+      g * Math.pow(t, 3) * u * sin(rad(thetaInDeg)) +
+      0.25 * square(g) * Math.pow(t, 4)
+  )
 }
 
 function rad(angleInDeg) {
