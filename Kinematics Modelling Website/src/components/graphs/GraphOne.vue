@@ -4,6 +4,8 @@ import { VuePlotly } from '@clalarco/vue3-plotly'
 //Vue modules which allow reactive referencing, and dynamic computing of variables
 import { ref, computed } from 'vue'
 
+import { fixedTimestepTrajectoryCoords } from './utils'
+
 let angle = ref(45)
 let g = ref(9.81)
 let u = ref(10)
@@ -11,33 +13,14 @@ let initialYDisp = ref(0)
 let interval = ref(0.01)
 
 const data = computed(() => {
-  //Empty arrays to contain vertical and horizontal displacements
-  const xDisp = []
-  const yDisp = []
-
-  let Horizontalu = u.value * Math.cos((angle.value / 180) * Math.PI)
-  let Verticalu = u.value * Math.sin((angle.value / 180) * Math.PI)
-
-  xDisp.push(0)
-  yDisp.push(initialYDisp.value)
-
-  //Data points generated according to user-entered function with interval according to user input
-
-  while (yDisp[yDisp.length - 1] >= 0) {
-    Verticalu += -1 * g.value * interval.value
-    let newXDisp = xDisp[xDisp.length - 1] + Horizontalu * interval.value
-    let newYDisp = yDisp[yDisp.length - 1] + Verticalu * interval.value
-
-    xDisp.push(newXDisp)
-    yDisp.push(newYDisp)
-  }
-
-  if (yDisp[yDisp.length - 1] < 0) {
-    xDisp.pop()
-    yDisp.pop()
-  }
-
-  return [{ x: xDisp, y: yDisp, mode: 'lines' }]
+  let trajectoryCoords = fixedTimestepTrajectoryCoords(
+    u.value,
+    g.value,
+    initialYDisp.value,
+    angle.value,
+    interval.value
+  )
+  return [{ x: trajectoryCoords[0], y: trajectoryCoords[1], mode: 'lines' }]
 })
 
 const layout = {
