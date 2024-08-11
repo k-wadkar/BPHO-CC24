@@ -11,6 +11,8 @@ export {
   analyticalRangeCoords,
   calculateMaximaRange,
   calculateMinimaRange,
+  square,
+  sqrt,
   rad,
   deg
 }
@@ -26,34 +28,35 @@ function fixedTimestepTrajectoryCoords(u, g, h, xIntercept, thetaInDeg, timeInte
   let Horizontalu = u * cos(rad(thetaInDeg))
   let Verticalu = u * sin(rad(thetaInDeg))
 
-  //Y-intercept values pushed to coords arrays
+  //Projectile start coordinates pushed to coords arrays
   xDisp.push(xIntercept)
   yDisp.push(h)
 
   //Data points generated
+  let t = 0
 
-  while (yDisp[yDisp.length - 1] >= 0) {
-    Verticalu += -1 * g * timeInterval
+  do {
+    t += timeInterval
+
+    //Verticalu += -g * timeInterval
     let newXDisp = xDisp[xDisp.length - 1] + Horizontalu * timeInterval
-    let newYDisp = yDisp[yDisp.length - 1] + Verticalu * timeInterval
+    //let newYDisp = yDisp[yDisp.length - 1] + Verticalu * timeInterval
+    let newYDisp = Verticalu * t + 0.5 * -g * square(t) + h
 
     xDisp.push(newXDisp)
     yDisp.push(newYDisp)
-  }
+  } while (yDisp[yDisp.length - 1] > 0)
 
-  if (yDisp[yDisp.length - 1] < 0) {
+  while (yDisp[yDisp.length - 1] <= 0) {
     xDisp.pop()
     yDisp.pop()
-
-    let distanceToClose = yDisp[yDisp.length - 1]
-    let timeToCloseDistance = distanceToClose / -Verticalu
-    let newXDisp = Horizontalu * timeToCloseDistance + xDisp[xDisp.length - 1]
-
-    xDisp.push(newXDisp)
-    yDisp.push(0)
   }
 
-  return [xDisp, yDisp]
+  xDisp.push(xIntercept + calculateHorizontalProjectileRange(u, g, h, thetaInDeg))
+  yDisp.push(0)
+
+  //returns the x
+  return [xDisp, yDisp, Horizontalu, -Verticalu]
 }
 
 //Returns an array containing an array of x-values and a corresponding array of y-values
