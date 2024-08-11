@@ -14,7 +14,7 @@ let interval = ref(0.01)
 let cOfRestitution = ref(0.7)
 let numBounces = ref(10)
 
-const data = computed(() => {
+const data1 = computed(() => {
   let trajectoryCoords = fixedTimestepTrajectoryCoords(
     u.value,
     g.value,
@@ -51,9 +51,77 @@ const data = computed(() => {
   }
 
   return [
-    { x: trajectoryCoords[0], y: trajectoryCoords[1], mode: 'lines', line: { color: 'dodgerblue' } }
+    {
+      x: trajectoryCoords[0],
+      y: trajectoryCoords[1],
+      mode: 'lines',
+      line: { color: 'dodgerblue' }
+    }
   ]
 })
+
+let data2 = ref([
+  {
+    x: [],
+    y: [],
+    mode: 'lines',
+    line: { color: 'dodgerblue', dash: 'dot', width: 1 },
+    name: 'Trajectory'
+  },
+  {
+    x: [],
+    y: [],
+    type: 'scatter',
+    mode: 'markers',
+    marker: { color: 'goldenrod' },
+    name: 'Projectile'
+  }
+])
+
+function playAnimation() {
+  const data1Copy = data1.value
+
+  //console.log(data1Copy[0].x)
+
+  data2.value = [
+    {
+      x: [],
+      y: [],
+      mode: 'lines',
+      line: { color: 'dodgerblue', dash: 'dot', width: 1 },
+      name: 'Trajectory'
+    },
+    {
+      x: [],
+      y: [],
+      type: 'scatter',
+      mode: 'markers',
+      marker: { color: 'red' },
+      name: 'Projectile'
+    }
+  ]
+
+  let count = 0 // Initialize a counter
+
+  const intervalId = setInterval(() => {
+    addData(count, data1Copy) // Call function y
+    count++ // Increment the counter
+
+    if (count == data1Copy[0].x.length) {
+      clearInterval(intervalId) // Stop the interval after 12 calls
+    }
+  }, interval.value * 1000)
+}
+
+function addData(dataIndex, data1Copy) {
+  //Trajectory trace
+  data2.value[0].x.push(data1Copy[0].x[dataIndex])
+  data2.value[0].y.push(data1Copy[0].y[dataIndex])
+
+  //Ball trace
+  data2.value[1].x = [data1Copy[0].x[dataIndex]]
+  data2.value[1].y = [data1Copy[0].y[dataIndex]]
+}
 
 const layout = {
   paper_bgcolor: 'rgba(0, 0, 0, 0)',
@@ -63,17 +131,30 @@ const layout = {
 }
 
 //Other configuration settings for the chart
-const config = {
+const config1 = {
   //displayModeBar: false,
   scrollZoom: true,
   responsive: true
+}
+
+const config2 = {
+  displayModeBar: false,
+  scrollZoom: false,
+  responsive: false,
+  staticPlot: true
 }
 </script>
 
 <template>
   <main style="padding: 0px">
-    <VuePlotly :data="data" :layout="layout" :config="config"></VuePlotly>
+    <VuePlotly :data="data1" :layout="layout" :config="config1"></VuePlotly>
+    <VuePlotly :data="data2" :layout="layout" :config="config2"></VuePlotly>
 
+    <div id="animationDiv">
+      <br />
+      <button @click="playAnimation">Play animation</button>
+    </div>
+    <br />
     <table id="graphConfig">
       <tr>
         <td><label>Angle/°</label></td>
@@ -150,6 +231,10 @@ const config = {
 #graphConfig {
   border-spacing: 10px;
   margin: auto;
+}
+#animationDiv {
+  display: flex;
+  justify-content: center;
 }
 input[type='number'] {
   width: 5rem;
