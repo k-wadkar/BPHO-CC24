@@ -1,5 +1,6 @@
 export {
   fixedTimestepTrajectoryCoords,
+  fixedTimestepWithDragCoords,
   analyticalTrajectoryCoords,
   analyticalTrajectoryCoordsExtra,
   calculateHorizontalProjectileRange,
@@ -57,6 +58,61 @@ function fixedTimestepTrajectoryCoords(u, g, h, xIntercept, thetaInDeg, timeInte
 
   //returns the x
   return [xDisp, yDisp, Horizontalu, -Verticalu]
+}
+
+function fixedTimestepWithDragCoords(
+  u,
+  g,
+  h,
+  thetaInDeg,
+  timeInterval,
+  dragCoefficient,
+  CSA,
+  airDensity,
+  mass
+) {
+  // Air resistance factor
+  let k = (0.5 * dragCoefficient * airDensity * CSA) / mass
+
+  console.log(k)
+
+  const xDisp = []
+  const yDisp = []
+
+  xDisp.push(0)
+  yDisp.push(h)
+
+  let ux = u * cos(rad(thetaInDeg))
+  let uy = u * sin(rad(thetaInDeg))
+
+  let vx = ux
+  let vy = uy
+
+  do {
+    let v = sqrt(square(vx) + square(vy))
+
+    let ax = (-vx / v) * k * square(v)
+    let ay = -g - (vy / v) * k * square(v)
+
+    xDisp.push(xDisp[xDisp.length - 1] + vx * timeInterval + 0.5 * ax * square(timeInterval))
+    yDisp.push(yDisp[yDisp.length - 1] + vy * timeInterval + 0.5 * ay * square(timeInterval))
+
+    vx += ax * timeInterval
+    vy += ay * timeInterval
+  } while (yDisp[yDisp.length - 1] > 0)
+
+  while (yDisp[yDisp.length - 1] <= 0) {
+    xDisp.pop()
+    yDisp.pop()
+  }
+
+  let timeToLand = yDisp[yDisp.length - 1] / -vy
+  let finalDistanceTravelled = vx * timeToLand
+
+  xDisp.push(xDisp[xDisp.length - 1] + finalDistanceTravelled)
+  yDisp.push(0)
+
+  return [xDisp, yDisp]
 }
 
 //Returns an array containing an array of x-values and a corresponding array of y-values

@@ -1,5 +1,6 @@
 <script setup>
 import GraphThree from '@/components/graphs/GraphThree.vue'
+import ReloadButton from '@/components/ReloadButton.vue'
 </script>
 
 <template>
@@ -13,6 +14,7 @@ import GraphThree from '@/components/graphs/GraphThree.vue'
       >
     </p>
     <GraphThree />
+    <ReloadButton />
   </div>
 </template>
 
