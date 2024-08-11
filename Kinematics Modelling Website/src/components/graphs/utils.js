@@ -17,7 +17,7 @@ export {
 
 //Returns an array containing an array of x-values and a corresponding array of y-values
 //Calculations made using discrete timesteps
-function fixedTimestepTrajectoryCoords(u, g, h, thetaInDeg, timeInterval) {
+function fixedTimestepTrajectoryCoords(u, g, h, xIntercept, thetaInDeg, timeInterval) {
   //Empty arrays to contain vertical and horizontal displacements
   const xDisp = []
   const yDisp = []
@@ -27,7 +27,7 @@ function fixedTimestepTrajectoryCoords(u, g, h, thetaInDeg, timeInterval) {
   let Verticalu = u * sin(rad(thetaInDeg))
 
   //Y-intercept values pushed to coords arrays
-  xDisp.push(0)
+  xDisp.push(xIntercept)
   yDisp.push(h)
 
   //Data points generated
@@ -44,6 +44,13 @@ function fixedTimestepTrajectoryCoords(u, g, h, thetaInDeg, timeInterval) {
   if (yDisp[yDisp.length - 1] < 0) {
     xDisp.pop()
     yDisp.pop()
+
+    let distanceToClose = yDisp[yDisp.length - 1]
+    let timeToCloseDistance = distanceToClose / -Verticalu
+    let newXDisp = Horizontalu * timeToCloseDistance + xDisp[xDisp.length - 1]
+
+    xDisp.push(newXDisp)
+    yDisp.push(0)
   }
 
   return [xDisp, yDisp]

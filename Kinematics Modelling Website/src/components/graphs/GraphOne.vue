@@ -17,6 +17,7 @@ const data = computed(() => {
     u.value,
     g.value,
     initialYDisp.value,
+    0,
     angle.value,
     interval.value
   )
