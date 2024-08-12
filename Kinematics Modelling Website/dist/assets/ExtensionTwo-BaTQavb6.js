@@ -1,0 +1,1 @@
+import{_ as o,o as t,c as n,a as e}from"./index-C5H3WEU1.js";const s={},c={class:"rootElement"},_=e("h1",null,"Extension Two",-1),a=e("p",null,"(Pending)",-1),r=[_,a];function i(d,l){return t(),n("div",c,r)}const h=o(s,[["render",i]]);export{h as default};
