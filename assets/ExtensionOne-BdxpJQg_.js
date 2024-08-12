@@ -1,0 +1,1 @@
+import{_ as n,o,c as t,a as e}from"./index-CHu6RTZt.js";const s={},c={class:"rootElement"},_=e("h1",null,"Extension One",-1),a=e("p",null,"(Pending)",-1),r=[_,a];function i(d,l){return o(),t("div",c,r)}const h=n(s,[["render",i]]);export{h as default};
